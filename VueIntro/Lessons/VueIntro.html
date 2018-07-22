@@ -4,16 +4,43 @@
     <meta charset="utf-8" />
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link href="../Style101.css" rel="stylesheet" />
 </head>
 <body>
-    <h1>Vue Instance Lessons</h1>
-    <div id="vueDiv">
-        Products: {{Product}}
+    <div class="nav-bar">
+        <h1>Vue Instance Lessons</h1>
     </div>
+    <div id="vueDiv">
+        <div class="product">
+            <div class="product-image">
+                <img v-bind:src="image" />
 
+            </div>
 
+            <div class="product-info">
+                Product: {{Product}}<br />
+                Description: {{Desc}}
+                <p v-if="stock>10">Lots Of Stock</p>
+                <p v-else-if="stock<=10">Low Stock</p>
+                <p v-else>Sorry sold out.</p>
+                <p v-show="!lots">More on the way.</p>
+                <br />
+                <ul>
+                    <li v-for="part in parts">{{part}}</li>
+                </ul>
+                <div v-for="v in variants" :key="v.vId">
+                    <p @mouseover="changeImage(v.vImage)" >{{v.vColour}}</p>
+                </div>
 
+                <button v-on:click="addToCart">Add to Cart</button>
+                <button v-on:click="subFromCart">Remove 1 from Cart</button>
+                <button v-on:click="ordered = 0">Reset Cart</button>
+                <div class="cart">Order {{ordered}}</div>
+            </div>
+            <a v-bind:href="clink">The Odyssey EXO Seven Putter</a>
+        </div>
 
+    </div>
 
     <hr />
     <script src="../Scripts/Intro.js"></script>
