@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link href="../Style101.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="nav-bar">
+        <h1>Vue Instance Lessons</h1>
+    </div>
+    <div id="vueDiv">
+        <div class="cart">Order ( {{ordered.length}} )</div>
+        <prod :prem="prem" @add-to-cart="updateCart" @rmv-from-cart="removeFromCart"></prod>
+        <prod></prod>
+
+    </div>
+
+    <hr />
+    <script src="../Scripts/Intro_02.js"></script>
+</body>
+</html>

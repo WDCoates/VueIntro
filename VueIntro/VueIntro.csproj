@@ -70,7 +70,9 @@
   <ItemGroup>
     <Content Include="Images\BlackGrip-1-12185.png" />
     <Content Include="Images\putters-1.png" />
+    <Content Include="Lessons\VueIntro_02.html" />
     <Content Include="Lessons\VueIntro.html" />
+    <Content Include="Scripts\Intro_02.js" />
     <Content Include="Scripts\Intro.js" />
     <Content Include="Style101.css" />
     <Content Include="Web.config" />

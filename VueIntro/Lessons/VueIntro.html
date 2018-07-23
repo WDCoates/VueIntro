@@ -18,8 +18,9 @@
             </div>
 
             <div class="product-info">
-                Product: {{Product}}<br />
+                {{prodTitle}}<br />
                 Description: {{Desc}}
+                <p>{{stock}}</p>
                 <p v-if="stock>10">Lots Of Stock</p>
                 <p v-else-if="stock<=10">Low Stock</p>
                 <p v-else>Sorry sold out.</p>
@@ -28,11 +29,15 @@
                 <ul>
                     <li v-for="part in parts">{{part}}</li>
                 </ul>
-                <div v-for="v in variants" :key="v.vId">
-                    <p @mouseover="changeImage(v.vImage)" >{{v.vColour}}</p>
+                <div v-for="(v, ind) in variants" :key="v.vId" 
+                     class="color-box" :style="{backgroundColor: v.vColour}"
+                     @mouseover="changeImageByIndex(ind)
+                    ">
                 </div>
 
-                <button v-on:click="addToCart">Add to Cart</button>
+                <button v-on:click="addToCart" :disabled="stock === 0"
+                        :class="{disabledButton: !lots}"
+                        >Add to Cart</button>
                 <button v-on:click="subFromCart">Remove 1 from Cart</button>
                 <button v-on:click="ordered = 0">Reset Cart</button>
                 <div class="cart">Order {{ordered}}</div>
