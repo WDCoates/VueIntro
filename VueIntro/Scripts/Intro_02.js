@@ -1,4 +1,17 @@
-﻿Vue.component('prod',
+﻿Vue.component('prod-review', {
+    template: `
+        <input v-model="name"></input>
+    `,
+    data() {
+        return {
+            name: null
+        }
+    }
+}
+)
+
+
+Vue.component('prod',
     {
         props: {
             prem: {
@@ -101,17 +114,7 @@
     }
 )
 
-Vue.component('prod-review', {
-        template: `
-        <input v-model="name"></input>
-    `,
-        data() {
-            return {
-                name: null
-            }
-        }
-    }
-)
+
 
 var vueApp = new Vue({
     el: '#vueDiv',
