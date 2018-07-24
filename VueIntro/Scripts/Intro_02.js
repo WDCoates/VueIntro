@@ -1,14 +1,70 @@
-﻿Vue.component('prod-review', {
-    template: `
-        <input v-model="name"></input>
+﻿Vue.component('prod-review',
+    {
+        template: `
+            <form class="review-form" @submit.prevent="onSubmit">
+              <p>
+                <label for="name">Name:</label>
+                <input id="name" v-model="name" placeholder="name" required>
+              </p>
+              
+              <p>
+                <label for="review">Review:</label>      
+                <textarea id="review" v-model="review" required></textarea>
+              </p>
+              
+              <p>
+                <label for="rating">Rating:</label>
+                <select id="rating" v-model.number="rating" required>
+                  <option>5</option>
+                  <option>4</option>
+                  <option>3</option>
+                  <option>2</option>
+                  <option>1</option>
+                </select>
+              </p>
+
+              <p v-if="errors.length">
+                  <b>Please correct the following error(s):</b>
+                  <ul>
+                    <li v-for="error in errors">{{ error }}</li>
+                  </ul>
+              </p>
+                  
+              <p>
+                <input type="submit" value="Submit">  
+              </p>    
+            
+            </form>
     `,
-    data() {
-        return {
-            name: null
+        data() {
+            return {
+                name: 'What is your name',
+                review: null,
+                rating: null,
+                errors: []
+            }
+        },
+        methods: {
+            onSubmit() {
+                if ((this.name && this.name !== 'What is your name') && this.review && this.rating) {
+                    let productReview = {
+                        name: this.name,
+                        review: this.review,
+                        rating: this.rating
+                    }
+                    this.$emit('review-done', productReview)
+                    this.name = 'Next please...'
+                    this.review = null
+                    this.rating = null
+                } else {
+                    if(!this.name || this.name === 'What is your name' ) this.errors.push("Name required.")
+                    if(!this.review) this.errors.push("Review required.")
+                    if(!this.rating) this.errors.push("Rating required.")
+                }
+            }
         }
     }
-}
-)
+);
 
 
 Vue.component('prod',
@@ -56,7 +112,21 @@ Vue.component('prod',
                     
                 </div>
                 <a v-bind:href="clink">The Odyssey EXO Seven Putter</a>
-                <prod-review></prod-review>
+
+                <div>
+                    <h2>Reviews</h2>
+                    <p v-if="!reviews.length">There are no reviews yet.</p>
+                    <ul>
+                      <li v-for="review in reviews">
+                      {{review}}
+                      <p>{{ review.name }}</p>
+                      <p>Rating: {{ review.rating }}</p>
+                      <p>{{ review.review }}</p>
+                      </li>
+                    </ul>
+                </div>
+
+                <prod-review @review-done="addReview"></prod-review>
             </div>
         `,
         data() {
@@ -73,7 +143,8 @@ Vue.component('prod',
                 variants: [
                     { vId: 1, vColour: 'Red', vImage: '../Images/putters-1.png', vStock: 20 },
                     { vId: 2, vColour: 'Black', vImage: '../Images/BlackGrip-1-12185.png', vStock: 20 }
-                ]
+                ],
+                reviews:[]
             }
         },
         methods: {
@@ -91,6 +162,9 @@ Vue.component('prod',
             changeImageByIndex (ind) {
                 this.selVariant = ind;
                 console.log('Index:' + ind);
+            },
+            addReview(prodReview) {
+                this.reviews.push(prodReview)
             }
         },
         computed: {
