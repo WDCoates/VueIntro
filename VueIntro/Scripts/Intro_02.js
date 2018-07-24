@@ -1,4 +1,51 @@
-﻿Vue.component('prod-review',
+﻿var theBus = new Vue()
+
+Vue.component('prod-tabs', {
+    props: {
+        reviews: {
+            type: Array,
+            required: true
+        }
+    },
+    template: `
+        <div>
+            <span class="tab" :class="{ activeTab: selTab === tab }" v-for="(tab, index) in tabs"  :key="index" 
+            @click="selTab = tab" 
+           >
+            {{tab}}
+            </span>
+
+            <div v-show="selTab === 'Reviews'">
+                <h2>Reviews</h2>
+            
+                <p v-if="!reviews.length">There are no reviews yet.</p>
+                <ul>
+                    <li v-for="review in reviews">
+                    {{review}}
+                    <p>{{ review.name }}</p>
+                    <p>Rating: {{ review.rating }}</p>
+                    <p>{{ review.review }}</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div v-show="selTab === 'Submit a Review'">
+                <h2>Make a Review</h2>
+            
+                 <prod-review></prod-review>
+            </div>
+
+        </div>
+    `,
+    data() {
+        return {
+            tabs: ['Reviews', 'Submit a Review'],
+            selTab: 'Reviews'
+        }
+    }
+})
+
+Vue.component('prod-review',
     {
         template: `
             <form class="review-form" @submit.prevent="onSubmit">
@@ -35,6 +82,8 @@
               </p>    
             
             </form>
+
+            
     `,
         data() {
             return {
@@ -52,7 +101,7 @@
                         review: this.review,
                         rating: this.rating
                     }
-                    this.$emit('review-done', productReview)
+                    theBus.$emit('review-done', productReview)
                     this.name = 'Next please...'
                     this.review = null
                     this.rating = null
@@ -112,21 +161,9 @@ Vue.component('prod',
                     
                 </div>
                 <a v-bind:href="clink">The Odyssey EXO Seven Putter</a>
+                <p></P>
 
-                <div>
-                    <h2>Reviews</h2>
-                    <p v-if="!reviews.length">There are no reviews yet.</p>
-                    <ul>
-                      <li v-for="review in reviews">
-                      {{review}}
-                      <p>{{ review.name }}</p>
-                      <p>Rating: {{ review.rating }}</p>
-                      <p>{{ review.review }}</p>
-                      </li>
-                    </ul>
-                </div>
-
-                <prod-review @review-done="addReview"></prod-review>
+                <prod-tabs :reviews="reviews"></prod-tabs>
             </div>
         `,
         data() {
@@ -162,9 +199,6 @@ Vue.component('prod',
             changeImageByIndex (ind) {
                 this.selVariant = ind;
                 console.log('Index:' + ind);
-            },
-            addReview(prodReview) {
-                this.reviews.push(prodReview)
             }
         },
         computed: {
@@ -184,10 +218,15 @@ Vue.component('prod',
                 }
                 return test;
             }
+        },
+        mounted() {     //runs as soon as loaded
+            theBus.$on('review-done', prodR => {
+                this.reviews.push(prodR)
+            })
+
         }
     }
 )
-
 
 
 var vueApp = new Vue({
