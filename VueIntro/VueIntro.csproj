@@ -74,6 +74,7 @@
     <Content Include="Lessons\VueIntro.html" />
     <Content Include="Scripts\Intro_02.js" />
     <Content Include="Scripts\Intro.js" />
+    <Content Include="Scripts\vue.js" />
     <Content Include="Style101.css" />
     <Content Include="Web.config" />
   </ItemGroup>
